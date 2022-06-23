@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.focusable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
@@ -106,6 +104,7 @@ val contentData = mutableListOf<Section>().apply {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier
@@ -113,13 +112,14 @@ fun HomeContent(
     val listState = rememberLazyListState()
     val coroutine = rememberCoroutineScope()
 
-    Box(modifier = modifier.background(color = Color.LightGray)) {
+    Box(modifier = modifier.background(color = Color.LightGray).focusGroup()) {
         LazyColumn(state = listState) {
             itemsIndexed(contentData) { index, item ->
                 SwimLine(item) {
-                    coroutine.launch {
-                        listState.animateScrollToItem(index, -100.dp.value.toInt())
-                    }
+//                    coroutine.launch {
+//                        val offset = if (index > 0) -100.dp.value.toInt() else 0
+//                        listState.animateScrollToItem(index, 0)
+//                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -139,10 +139,10 @@ fun SwimLine(section: Section, hasFocus: () -> Unit) {
         LazyRow(state = listState) {
             itemsIndexed(section.data) { index, item ->
                 StandardCard(item) {
-                    coroutine.launch {
-                        listState.animateScrollToItem(index)
-                    }
-                    hasFocus()
+//                    coroutine.launch {
+//                        listState.animateScrollToItem(index)
+//                    }
+//                    hasFocus()
                 }
                 Spacer(modifier = Modifier.width(10.dp))
             }
@@ -241,7 +241,7 @@ fun Hero() {
 
 }
 
-@Preview(device = Devices.PIXEL_2, showBackground = true, showSystemUi = true)
+@Preview(device = Devices.DESKTOP, showBackground = true, showSystemUi = true)
 @Composable
 fun Preview() {
     Box {
