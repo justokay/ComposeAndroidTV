@@ -9,7 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
-import app.justokay.tvbase.theme.MyTextComposeApplicationTheme
-import kotlinx.coroutines.launch
+import app.justokay.tvbase.theme.AppTheme
 
 /**
  * Loads [MainFragment].
@@ -43,7 +42,7 @@ class MainActivity : FragmentActivity() {
 //                .commitNow()
 //        }
         setContent {
-            MyTextComposeApplicationTheme {
+            AppTheme {
                 // A surface container using the 'background' color from the theme
                 HomeScreen()
             }
@@ -112,7 +111,9 @@ fun HomeContent(
     val listState = rememberLazyListState()
     val coroutine = rememberCoroutineScope()
 
-    Box(modifier = modifier.background(color = Color.LightGray).focusGroup()) {
+    Box(modifier = modifier
+        .background(color = Color.LightGray)
+        .focusGroup()) {
         LazyColumn(state = listState) {
             itemsIndexed(contentData) { index, item ->
                 SwimLine(item) {
