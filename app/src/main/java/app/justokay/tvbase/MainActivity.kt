@@ -24,6 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
+import androidx.tv.foundation.lazy.list.TvLazyColumn
+import androidx.tv.foundation.lazy.list.TvLazyRow
+import androidx.tv.foundation.lazy.list.itemsIndexed
+import androidx.tv.foundation.lazy.list.rememberTvLazyListState
 import app.justokay.tvbase.theme.AppTheme
 
 /**
@@ -108,13 +112,13 @@ val contentData = mutableListOf<Section>().apply {
 fun HomeContent(
     modifier: Modifier = Modifier
 ) {
-    val listState = rememberLazyListState()
+    val listState = rememberTvLazyListState()
     val coroutine = rememberCoroutineScope()
 
     Box(modifier = modifier
         .background(color = Color.LightGray)
         .focusGroup()) {
-        LazyColumn(state = listState) {
+        TvLazyColumn(state = listState) {
             itemsIndexed(contentData) { index, item ->
                 SwimLine(item) {
 //                    coroutine.launch {
@@ -130,14 +134,14 @@ fun HomeContent(
 
 @Composable
 fun SwimLine(section: Section, hasFocus: () -> Unit) {
-    val listState = rememberLazyListState()
+    val listState = rememberTvLazyListState()
     val coroutine = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(text = section.title, color = Color.White)
-        LazyRow(state = listState) {
+        TvLazyRow(state = listState) {
             itemsIndexed(section.data) { index, item ->
                 StandardCard(item) {
 //                    coroutine.launch {

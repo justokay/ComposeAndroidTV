@@ -11,6 +11,7 @@ kotlinxCollectionsImmutable = "0.3.5"
 kotlinxDatetime = "0.4.0"
 
 compose = "1.4.3"
+composeTv = "1.0.0-alpha06"
 accompanist = "0.30.1"
 composeBom = "2023.05.00"
 activityCompose = "1.7.1"
@@ -65,6 +66,8 @@ compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+compose-tv = { module = "androidx.tv:tv-foundation", version.ref = "composeTv" }
+compose-tv-material = { module = "androidx.tv:tv-material", version.ref = "composeTv" }
 
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist"}
 
@@ -94,6 +97,7 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 [bundles]
 # Define bundles/groups of libraries
 compose = ["compose.activity", "compose.ui", "compose.material3", "compose.material3.windowSizeClass", "compose.icons", "compose.ui.preview"]
+composeTv = ["compose.tv", "compose.tv.material"]
 navigation = ["navigation.fragment", "navigation.ui"]
 lifecycle = ["lifecycle.viewmodel", "lifecycle.runtime.compose", "lifecycle.viewmodel.compose", "lifecycle.savedstate"]
 

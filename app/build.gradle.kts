@@ -47,6 +47,7 @@ android {
             // Enable experimental coroutines APIs, including Flow
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+            "-opt-in=androidx.tv.material3.ExperimentalTvMaterial3Api",
             "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
             "-opt-in=kotlinx.coroutines.FlowPreview",
             "-opt-in=kotlin.Experimental",
@@ -88,6 +89,7 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation(libs.bundles.compose)
+    implementation(libs.bundles.composeTv)
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 }
