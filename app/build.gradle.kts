@@ -2,27 +2,27 @@
 plugins {
     alias(libs.plugins.application)
     alias(libs.plugins.kotlin)
-    kotlin("kapt")
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+composeCompiler {
+    enableStrongSkippingMode = true
 }
 
 android {
     namespace = "app.justokay.tvbase"
 
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "app.justokay.tvbase"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-//        vectorDrawables {
-//            useSupportLibrary true
-//        }
     }
 
     buildTypes {
@@ -64,13 +64,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
-    // Allow references to generated code
-    kapt {
-        correctErrorTypes = true
-    }
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -89,7 +82,10 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeTv)
+    implementation(libs.compose.tv.material)
+    implementation(libs.compose.navigation)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.lifecycle.runtime)
 }

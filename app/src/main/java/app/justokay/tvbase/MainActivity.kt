@@ -2,7 +2,7 @@ package app.justokay.tvbase
 
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -23,40 +23,54 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.FragmentActivity
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.itemsIndexed
-import androidx.tv.foundation.lazy.list.rememberTvLazyListState
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import app.justokay.tvbase.theme.AppTheme
+import kotlinx.serialization.Serializable
 
-/**
- * Loads [MainFragment].
- */
-class MainActivity : FragmentActivity() {
+sealed class Navigation {
+    @Serializable
+    object Home : Navigation()
 
-//    private var state
+    @Serializable
+    data class Detail(val id: String) : Navigation()
+}
+
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.main_browse_fragment, MainFragment())
-//                .commitNow()
-//        }
         setContent {
             AppTheme {
-                // A surface container using the 'background' color from the theme
-                HomeScreen()
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = Navigation.Home
+                ) {
+                    composable<Navigation.Home> {
+                        HomeScreen(onItemClick = {
+                            navController.navigate(Navigation.Detail(it))
+                        })
+                    }
+                    composable<Navigation.Detail> {
+                        val id = it.toRoute<Navigation.Detail>().id
+
+                        Box(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Text(
+                                "Detail $id",
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-
-        return super.onKeyDown(keyCode, event)
-    }
 }
 
 val data = listOf(
@@ -66,13 +80,9 @@ val data = listOf(
 )
 
 @Composable
-fun HomeScreen() {
-//    val focusManager = LocalFocusManager.current
-
-//    LaunchedEffect(Unit) {
-//        focusManager.moveFocus(FocusDirection.Next)
-//    }
-
+fun HomeScreen(
+    onItemClick: (String) -> Unit = {}
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -83,7 +93,8 @@ fun HomeScreen() {
             HomeContent(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onItemClick = onItemClick
             )
         }
     }
@@ -110,60 +121,56 @@ val contentData = mutableListOf<Section>().apply {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (String) -> Unit = {}
 ) {
-    val listState = rememberTvLazyListState()
-    val coroutine = rememberCoroutineScope()
+    val listState = rememberLazyListState()
 
-    Box(modifier = modifier
-        .background(color = Color.LightGray)
-        .focusGroup()) {
-        TvLazyColumn(state = listState) {
+    Box(
+        modifier = modifier
+            .background(color = Color.LightGray)
+            .focusGroup()
+    ) {
+        LazyColumn(
+            state = listState,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             itemsIndexed(contentData) { index, item ->
-                SwimLine(item) {
-//                    coroutine.launch {
-//                        val offset = if (index > 0) -100.dp.value.toInt() else 0
-//                        listState.animateScrollToItem(index, 0)
-//                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
+                SwimLine(item, onItemClick)
             }
         }
     }
 }
 
 @Composable
-fun SwimLine(section: Section, hasFocus: () -> Unit) {
-    val listState = rememberTvLazyListState()
-    val coroutine = rememberCoroutineScope()
+fun SwimLine(
+    section: Section,
+    onItemClick: (String) -> Unit = {}
+) {
+    val listState = rememberLazyListState()
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(text = section.title, color = Color.White)
-        TvLazyRow(state = listState) {
+        LazyRow(state = listState, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             itemsIndexed(section.data) { index, item ->
-                StandardCard(item) {
-//                    coroutine.launch {
-//                        listState.animateScrollToItem(index)
-//                    }
-//                    hasFocus()
-                }
-                Spacer(modifier = Modifier.width(10.dp))
+                StandardCard(item, modifier = Modifier.clickable {
+                    onItemClick(item)
+                })
             }
         }
     }
 }
 
 @Composable
-fun StandardCard(name: String, receiveFocus: () -> Unit) {
+fun StandardCard(
+    name: String,
+    modifier: Modifier = Modifier
+) {
     val focusRequester = FocusRequester()
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
-
-    if (isFocused) {
-        receiveFocus()
-    }
 
     Box(
         modifier = Modifier
@@ -180,7 +187,8 @@ fun StandardCard(name: String, receiveFocus: () -> Unit) {
             .border(
                 color = if (isFocused) Color.Red else Color.White,
                 width = 2.dp
-            ),
+            )
+            .then(modifier),
         contentAlignment = Alignment.Center
     ) {
         Text(text = name, color = Color.White)
@@ -213,17 +221,6 @@ fun TopBar(data: List<String>) {
 
 @Composable
 fun NavigationItem(name: String) {
-    var focusState by remember {
-        mutableStateOf(false)
-    }
-
-//    val requester = remember {
-//        FocusRequester()
-//    }
-
-//    LaunchedEffect(Unit) {
-//        requester.requestFocus()
-//    }
     val focusRequester = FocusRequester()
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
@@ -246,7 +243,7 @@ fun Hero() {
 
 }
 
-@Preview(device = Devices.DESKTOP, showBackground = true, showSystemUi = true)
+@Preview(device = Devices.TV_1080p, showBackground = true, showSystemUi = true)
 @Composable
 fun Preview() {
     Box {

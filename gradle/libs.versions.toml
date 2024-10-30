@@ -1,38 +1,40 @@
 [versions]
 # Define the dependency versions
-glide = "4.13.0"
-gradle = "8.0.1"
-kotlin = "1.8.0"
+glide = "4.16.0"
+gradle = "8.0.2"
+kotlin = "2.0.0"
 
-androidGradlePlugin = "8.0.1"
+androidGradlePlugin = "8.7.1"
 
 kotlinGradlePlugin = "1.6.21"
-kotlinxCollectionsImmutable = "0.3.5"
-kotlinxDatetime = "0.4.0"
+kotlinxCollectionsImmutable = "0.3.8"
+kotlinxDatetime = "0.6.1"
+kotlinSerealization = "1.7.3"
 
-compose = "1.4.3"
-composeTv = "1.0.0-alpha06"
-accompanist = "0.30.1"
-composeBom = "2023.05.00"
-activityCompose = "1.7.1"
+compose = "1.7.4"
+composeTv = "1.0.0"
+accompanist = "0.34.0"
+composeBom = "2024.10.00"
+activityCompose = "1.9.3"
 composeMatherial3 = "1.1.0-alpha08"
 composeCompiler = "1.4.0"
 
-androidxCore = "1.10.0"
-appcompat = "1.6.1"
-androidMaterial = "1.8.0"
+androidxCore = "1.13.1"
+appcompat = "1.7.0"
+androidMaterial = "1.12.0"
 constraintlayout = "2.1.4"
 leanback = "1.0.0"
-navigation = "2.5.3"
+lifecycleRuntimeKtx = "2.6.1"
+navigation = "2.8.3"
 
-lifecycle = "2.6.1"
+lifecycle = "2.8.6"
 
 dagger = "2.44.2"
-room = "2.5.1"
+room = "2.6.1"
 
 junit = "4.13.2"
-androidxTestExt = "1.1.5"
-androidxTestEspresso = "3.5.1"
+androidxTestExt = "1.2.1"
+androidxTestEspresso = "3.6.1"
 
 timber = "5.0.1"
 
@@ -47,6 +49,7 @@ gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerealization" }
 
 core-ctx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -66,7 +69,7 @@ compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
-compose-tv = { module = "androidx.tv:tv-foundation", version.ref = "composeTv" }
+#compose-tv = { module = "androidx.tv:tv-foundation", version.ref = "composeTv" }
 compose-tv-material = { module = "androidx.tv:tv-material", version.ref = "composeTv" }
 
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist"}
@@ -97,7 +100,7 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 [bundles]
 # Define bundles/groups of libraries
 compose = ["compose.activity", "compose.ui", "compose.material3", "compose.material3.windowSizeClass", "compose.icons", "compose.ui.preview"]
-composeTv = ["compose.tv", "compose.tv.material"]
+#composeTv = ["compose.tv", "compose.tv.material"]
 navigation = ["navigation.fragment", "navigation.ui"]
 lifecycle = ["lifecycle.viewmodel", "lifecycle.runtime.compose", "lifecycle.viewmodel.compose", "lifecycle.savedstate"]
 
@@ -107,3 +110,5 @@ application = { id = "com.android.application", version.ref = "androidGradlePlug
 library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.0-1.0.9" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
